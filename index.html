@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" ng-app='gearApp' class='html'>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Gear Buddy</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="css/animate.min.css" type="text/css">
+    <link rel="stylesheet" href="css/creative.css" type="text/css">
+</head>
+
+<body ng-controller='mainCtrl' id="page-top">
+
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">Gear Buddy</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="page-scroll" href="#about">About</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#lend">Lend Gear</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#contact">Help</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<header>
+        <div class="header-content">
+            <div class="header-content-inner">
+                <h1>Gear Buddy</h1>
+                <hr>
+                <p>Borrow gear anywhere you go!</p>
+                <form>
+                <div class="form-inline">
+                Select Type of Gear
+                &nbsp;
+                <select class="form-control" ng-model='searchGear'>
+                  <option>Bike</option>
+                  <option>Ski</option>
+                  <option>Climb</option>
+                </select>
+                &nbsp;
+                &nbsp;
+                Select Location
+                &nbsp;
+                <select class="form-control" ng-model='searchTermLocation'>
+                  <option>Utah</option>
+                  <option>California</option>
+                  <option>Oregon</option>
+                </select>
+                </div>
+                <br></br>
+                <a href="#borrow" ng-click="borrowGear()" class="btn btn-primary btn-xl page-scroll">Borrow Gear</a>
+              </form>
+            </div>
+        </div>
+    </header>
+    <section id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">About Gear Buddy</h2>
+                    <hr class="primary">
+                    <p>Gear Buddy is a place to lend and borrow the adventure gear when you are on vacation and don't have room to pack it. Simply search for the gear you need in the location that you need it, then send the owner of the gear an email!</p>
+                    <a href="#page-top" class="btn btn-primary btn-xl page-scroll">Borrow now!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="no-padding" id="borrow">
+        <div class="container-fluid">
+            <div class="row no-gutter">
+                  <div ng-repeat = 'post in fireData | filter: {gear: searchGear} | filter: {location: searchTermLocation}'  class="portfolio-box">
+                        <img src='{{post.image}}' class="img-responsive" alt="" style="height: 20em; width: 100%;">
+                        <div class="portfolio-box-caption" >
+                            <div class="portfolio-box-caption-content">
+                                <div class="project-name">
+                                    About My Gear:
+                                </div>
+                                <div class="project-category text-faded">
+                                    {{post.gearDescription}}
+                                </div>
+                                <br></br>
+                                    <a class="btn btn-md" class="project-category text-faded" style='color: white' ng-click='sendMail(post)'><i class="fa fa-envelope-o fa-3x wow bounceIn"></i><br></br>Borrow from {{post.name}}!</a>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-primary" id="lend">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-lg-offset-3 text-center">
+                  <h2 class="section-heading">Lend Your Gear!</h2>
+                  <hr class="light">
+                  <form name='postForm' ng-submit='postGear(post)'>
+                    <input class="form-control" style='color: grey' name="name" placeholder='Name' ng-model='post.userName'></input>
+                    <br></br>
+                    <div class="form-inline">
+                    <p class="text-faded">Select Type of Gear</p>
+                    <select class="form-control" ng-model='post.gear'>
+                      <option>Bike</option>
+                      <option>Ski</option>
+                      <option>Climb</option>
+                    </select>
+                  </div>
+                    <br></br>
+                    <textarea class="form-control" rows="2" style='color: grey' name="description" ng-model='post.gearDescription' placeholder='Please give gear description of your gear. (Size, Brand, Condition, Etc.)'></textarea>
+                    <br></br>
+                    <div class="form-inline">
+                    <p class="text-faded">Select your location</p>
+                    <select class="form-control" ng-model='post.gearLocation'>
+                      <option>Utah</option>
+                      <option>California</option>
+                      <option>Oregon</option>
+                    </select>
+                  </div>
+                    <br></br>
+                    <input class="form-control" style='color: grey' name="email" placeholder='Email' ng-model='post.email'></input>
+                    <br></br>
+                    <input class="form-control" style='color: grey' name="image" placeholder='Add Image URL' ng-model='post.image'></input>
+                    <br></br>
+                    <button class="btn btn-default btn-xl" type="button" name="button" ng-click=postGear(post)>SUBMIT</button>
+                    <br></br>
+                    </form
+                    <br></br>
+                    <h2 class="section-heading" style="text-align: center">{{submitted}}</h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">Help!</h2>
+                    <hr class="primary">
+                    <p>Having technical difficulties with Gear Buddy? Contact us via phone or email and we will help resolve the problem!</p>
+                </div>
+                <div class="col-lg-4 col-lg-offset-2 text-center">
+                    <i class="fa fa-phone fa-3x wow bounceIn"></i>
+                    <p>123-456-6789</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fa fa-envelope-o fa-3x wow bounceIn" data-wow-delay=".1s"></i>
+                    <p><a href="mailto:your-email@your-domain.com" class="btn btn-md" style="color: #F05F40">help@gearbuddy.com</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.min.js"></script>
+    <script src="js/jquery.fittext.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/creative.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.2/angular.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js'></script>
+  <script src="js/app.js"></script>
+  <script src="js/mainCtrl.js"></script>
+  <script src="js/gearService.js"></script>
+
+</body>
+
+</html>
