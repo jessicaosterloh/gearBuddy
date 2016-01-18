@@ -1,2 +1,5 @@
 'use strict'
-var app = angular.module('gearApp', ['firebase']);
+angular.module('gearApp', ['firebase'])
+.constant('fb', {
+  url: 'https://gearbuddy.firebaseio.com/'
+})

@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" ng-app='gearApp' class='html'>
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>Gear Buddy</title>
-
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
@@ -20,7 +16,6 @@
 </head>
 
 <body ng-controller='mainCtrl' id="page-top">
-
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -30,19 +25,27 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">Gear Buddy</a>
+                <a class="loggedIn loggedOut navbar-brand page-scroll uppercase" href="#page-top"><img id="fbUserImg" src='{{user.image}}'><span id="fbUserName">Hi {{user.name}}!</span></a>
             </div>
-
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" class='loggedInHide' ng-click="loginWithFacebook()">Login</a>
+                    </li>
                     <li>
                         <a class="page-scroll" href="#about">About</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#lend">Lend Gear</a>
+                        <a class="page-scroll loggedIn loggedOut" href="#borrow" >Borrow Gear</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll loggedIn loggedOut" href="#lend">Lend Gear</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#contact">Help</a>
+                    </li>
+                    <li>
+                        <a href="#" class='loggedIn loggedOut' ng-click="logout()">logout</a>
                     </li>
                 </ul>
             </div>
@@ -53,9 +56,32 @@
             <div class="header-content-inner">
                 <h1>Gear Buddy</h1>
                 <hr>
-                <p>Borrow gear anywhere you go!</p>
+                <h3 ng-hide='loginStatus'>An app that lets you borrow gear wherever you go!</h3>
+              <a ng-click="loginWithFacebook()" class="loggedInHide btn btn-primary btn-xl">LOGIN WITH FACEBOOK</a>
+              <a href="#borrow" class="loggedIn loggedOut page-scroll btn btn-primary btn-xl">Start borrowing now!</a>
+            </div>
+        </div>
+    </header>
+    <section class="bg-primary" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">About Gear Buddy</h2>
+                    <hr class="light">
+                    <p>Gear Buddy is a place to lend and borrow the adventure gear when you are on vacation and don't have room to pack it. Simply search for the gear you need in the location that you need it, then send the owner of the gear an email!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="borrow" class="loggedIn loggedOut">
+      <div class="container">
+          <div class="row">
+              <div class="col-lg-6 col-lg-offset-3 text-center">
+                <h2 class="section-heading">Borrow Gear</h2>
+                <hr class="primary">
                 <form>
                 <div class="form-inline">
+                <br></br>
                 Select Type of Gear
                 &nbsp;
                 <select class="form-control" ng-model='searchGear'>
@@ -77,45 +103,30 @@
                 <a href="#borrow" ng-click="borrowGear()" class="btn btn-primary btn-xl page-scroll">Borrow Gear</a>
               </form>
             </div>
-        </div>
-    </header>
-    <section id="about">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <h2 class="section-heading">About Gear Buddy</h2>
-                    <hr class="primary">
-                    <p>Gear Buddy is a place to lend and borrow the adventure gear when you are on vacation and don't have room to pack it. Simply search for the gear you need in the location that you need it, then send the owner of the gear an email!</p>
-                    <a href="#page-top" class="btn btn-primary btn-xl page-scroll">Borrow now!</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <section class="no-padding" id="borrow">
-        <div class="container-fluid">
-            <div class="row no-gutter">
-                  <div ng-repeat = 'post in fireData | filter: {gear: searchGear} | filter: {location: searchTermLocation}'  class="portfolio-box">
-                        <img src='{{post.image}}' class="img-responsive" alt="" style="height: 20em; width: 100%;">
-                        <div class="portfolio-box-caption" >
-                            <div class="portfolio-box-caption-content">
-                                <div class="project-name">
-                                    About My Gear:
-                                </div>
-                                <div class="project-category text-faded">
-                                    {{post.gearDescription}}
-                                </div>
-                                <br></br>
-                                    <a class="btn btn-md" class="project-category text-faded" style='color: white' ng-click='sendMail(post)'><i class="fa fa-envelope-o fa-3x wow bounceIn"></i><br></br>Borrow from {{post.name}}!</a>
-                                </div>
-                            </div>
+         </div>
+      </div>
+      <br></br>
+              <div class="container-fluid">
+                  <div class="row no-gutter">
+                        <div ng-repeat = 'post in fireData | filter: {gear: searchGear} | filter: {location: searchTermLocation}'  class="portfolio-box">
+                              <img src='{{post.image}}' class="img-responsive" alt="" style="height: 20em; width: 100%;">
+                              <div class="portfolio-box-caption" >
+                                  <div class="portfolio-box-caption-content">
+                                      <div class="project-name">
+                                          About My Gear:
+                                      </div>
+                                      <div class="project-category text-faded">
+                                          {{post.gearDescription}}
+                                      </div>
+                                      <br></br>
+                                      <a class="btn btn-md" class="project-category text-faded" style='color: white' ng-click='sendMail(post)'><i class="fa fa-envelope-o fa-3x wow bounceIn"></i><br></br>Borrow from {{post.name}}!</a>
+                                   </div>
+                              </div>
                         </div>
-                </div>
-            </div>
-        </div>
+                  </div>
+              </div>
     </section>
-    <section class="bg-primary" id="lend">
+    <section class="bg-primary loggedIn loggedOut" id="lend">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-lg-offset-3 text-center">
@@ -171,7 +182,7 @@
                 </div>
                 <div class="col-lg-4 text-center">
                     <i class="fa fa-envelope-o fa-3x wow bounceIn" data-wow-delay=".1s"></i>
-                    <p><a href="mailto:your-email@your-domain.com" class="btn btn-md" style="color: #F05F40">help@gearbuddy.com</a></p>
+                    <p><a href="mailto:info@gearbuddy.com" class="btn btn-md" style="color: #F05F40">info@gearbuddy.com</a></p>
                 </div>
             </div>
         </div>
@@ -189,7 +200,7 @@
   <script src="js/app.js"></script>
   <script src="js/mainCtrl.js"></script>
   <script src="js/gearService.js"></script>
-
+  <script src="js/script.js"></script>
 </body>
 
 </html>
