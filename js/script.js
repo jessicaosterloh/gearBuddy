@@ -16,8 +16,6 @@ var refreshUserData = function(){     //refresh user data with facebook and chan
   $('.loggedOut').show();
 }
 var refreshUserDataLogout = function(){     //refresh user data with facebook and change view with jquery based on login status
-  user.name = globalAuthData.facebook.displayName;
-  user.image = globalAuthData.facebook.profileImageURL;
   $("#fbUserImg").hide();
   $("#fbUserName").hide();
   $('.loggedOut').hide();
